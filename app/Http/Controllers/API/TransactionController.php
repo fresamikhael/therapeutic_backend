@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Models\Appointment;
+use App\Models\AppointmentDetail;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +24,9 @@ class TransactionController extends Controller
 
         // Proses Checkout
         $code = 'RENT-' . mt_rand(0000, 9999);
-        // $carts = Cart::with(['car', 'user'])
-        //                 ->where('users_id', Auth::user()->id)
-        //                 ->get();
+        $details = Appointment::with(['doctors', 'user'])
+                        ->where('users_id', Auth::user()->id)
+                        ->get();
 
         // // Menghitung Selisih Hari
         // $rentdate = $request->rent_date;
@@ -45,33 +46,22 @@ class TransactionController extends Controller
         // }
 
         // Transaction Create
-        Appointment::create([
+        $appointment = Appointment::create([
             'users_id' => $request->user()->id,
             'doctors_id' => $request->doctors_id,
             'price'=> (int) $request->price,
             'code' => $code
         ]);
 
-        // foreach ($carts as $cart){
+        foreach ($details as $detail){
 
-        //     // Merubah status mobil
-        //     Car::where('id', $cart->car->id)->update([
-        //         'status' => 'DISEWA'
-        //     ]);
-
-        //     $trx = 'TRX-' . mt_rand(0000, 9999);
-
-        //     TransactionDetail::create([
-        //         'transactions_id' => $transaction->id ,
-        //         'cars_id'=> $cart->car->id,
-        //         'price' => $cart->car->price * $days + $driver,
-        //         'status' => 'BELUM DIAMBIL',
-        //         'penalty' => NULL,
-        //         'finish_date' => $request->finish_date,
-        //         'code' => $trx,
-        //     ]);
-        // }
-
+            AppointmentDetail::create([
+                'appointments_id' => $appointment->id ,
+                'doctors_id'=> $detail->doctor->id,
+                'appointment_date' => $request->appointment_date,
+                'status' => 'PENDING',
+            ]);
+        }
 
         // // Delete Cart Data
         // Cart::where('users_id', Auth::user()->id)->delete();
