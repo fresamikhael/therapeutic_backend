@@ -1,15 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\DataDoctorController;
+use App\Http\Controllers\API\AppointmentDetailController;
 use App\Http\Controllers\API\DoctorCategoryController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\HospitalController;
-use App\Http\Controllers\API\HospitalDataController;
-use App\Http\Controllers\API\LoginController;
-use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,10 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('register', [UserController::class, 'register']);
-Route::post('registeran', [RegisterController::class, 'register']);
 
 Route::post('login', [UserController::class, 'login']);
-Route::post('loginan', [LoginController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function(){
 
@@ -36,10 +30,13 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('user', [UserController::class, 'updateProfile']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('transaction', [TransactionController::class, 'process']);
+    Route::post('appointmentdetail', [AppointmentDetailController::class, 'process']);
 
     Route::get('doctors',[DoctorController::class, 'all']);
     Route::get('categories',[DoctorCategoryController::class, 'all']);
     Route::get('hospitals',[HospitalController::class, 'all']);
+
+    Route::get('transaction/get',[TransactionController::class, 'all']);
 });
 
 

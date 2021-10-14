@@ -21,7 +21,7 @@ class AppointmentDetail extends Model
         'status'
     ];
 
-    protected $table = 'appointment';
+    protected $table = 'appointment_details';
 
     public function doctors()
     {
